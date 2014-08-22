@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    </head>
+    <body>
+        <ul>
+            <li>View console in Chrome's "Inspect Devices" to see any errors.</li>
+            <li>Watch <span id="not">may be</span> connected.</li>
+        </ul>
+    </body>
+    <script type="text/javascript" src="cordova.js"></script>
+    
+    <script type="text/javascript">
+        function updateStatus(error, connected){
+            var not = document.getElementById('not');
+            if (error){
+                not.innerHTML = 'may be';
+                return console.error(error);
+            }
+            
+            if (connected){
+                not.innerHTML = '';
+            }else{
+                not.innerHTML = 'not ';
+            }
+        }
+
+        function checkConnected(){
+            Pebble.isWatchConnected(updateStatus);
+        }
+
+        function deviceReady(){
+            setInterval(checkConnected, 500);
+        }
+
+        document.addEventListener("deviceready", deviceReady, false);
+    </script>
+</html>
