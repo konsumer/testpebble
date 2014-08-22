@@ -29,12 +29,8 @@
             }
         }
 
-        function checkConnected(){
-            Pebble.isWatchConnected(updateStatus);
-        }
-
         function deviceReady(){
-            setInterval(checkConnected, 500);
+            Pebble.isWatchConnected(updateStatus);
         }
 
         document.addEventListener("deviceready", deviceReady, false);
