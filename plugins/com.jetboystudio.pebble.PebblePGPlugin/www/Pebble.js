@@ -93,19 +93,23 @@ Pebble.registerPebbleDisconnectedReceiver = function(cb){
 };
 
 Pebble.registerReceivedDataHandler = function(uuid, cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedDataHandler', []);
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedDataHandler', [uuid]);
 };
 
 Pebble.registerReceivedAckHandler = function(uuid, cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedAckHandler', []);
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedAckHandler', [uuid]);
 };
 
 Pebble.registerReceivedNackHandler = function(uuid, cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedNackHandler', []);
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedNackHandler', [uuid]);
 };
 
 Pebble.sendAckToPebble = function(transactionId, cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendAckToPebble', []);
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendAckToPebble', [transactionId]);
+};
+
+Pebble.sendNackToPebble = function(transactionId, cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendNackToPebble', [transactionId]);
 };
 
 ///////  None of these are implemented:
@@ -134,9 +138,7 @@ Pebble.sendDataToPebbleWithTransactionId = function(cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendDataToPebbleWithTransactionId', []);
 };
 
-Pebble.sendNackToPebble = function(cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendNackToPebble', []);
-};
+
 
 
 // These probably shouldn't be hardcoded...
