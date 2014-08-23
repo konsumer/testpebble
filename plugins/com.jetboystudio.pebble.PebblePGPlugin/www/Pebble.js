@@ -76,15 +76,33 @@ Pebble.closeAppOnPebble = function(uuid, cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'closeAppOnPebble', [uuid]);
 };
 
-Pebble.startGolfOnPebble = function(cb){
-    cb = cb || function(){};
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'startGolfOnPebble', []);
-}
+/**
+ * Register callback for when Pebble is connected
+ * @param  {Function} cb function(error, status)
+ */
+Pebble.registerPebbleConnectedReceiver = function(cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerPebbleConnectedReceiver', []);
+};
 
-Pebble.startSportsOnPebble = function(cb){
-    cb = cb || function(){};
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'startSportsOnPebble', []);
-}
+/**
+ * Register callback for when Pebble is disconnected
+ * @param  {Function} cb function(error, status)
+ */
+Pebble.registerPebbleDisconnectedReceiver = function(cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerPebbleDisconnectedReceiver', []);
+};
+
+Pebble.registerReceivedDataHandler = function(uuid, cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedDataHandler', []);
+};
+
+Pebble.registerReceivedAckHandler = function(cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedAckHandler', []);
+};
+
+Pebble.registerReceivedNackHandler = function(cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedNackHandler', []);
+};
 
 ///////  None of these are implemented:
 
@@ -98,26 +116,6 @@ Pebble.registerDataLogReceiver = function(uuid, cb){
 
 Pebble.unregisterDataLogReceiver = function(cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'unregisterDataLogReceiver', []);
-};
-
-Pebble.registerPebbleConnectedReceiver = function(cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerPebbleConnectedReceiver', []);
-};
-
-Pebble.registerPebbleDisconnectedReceiver = function(cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerPebbleDisconnectedReceiver', []);
-};
-
-Pebble.registerReceivedAckHandler = function(cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedAckHandler', []);
-};
-
-Pebble.registerReceivedDataHandler = function(cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedDataHandler', []);
-};
-
-Pebble.registerReceivedNackHandler = function(cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedNackHandler', []);
 };
 
 Pebble.requestDataLogsForApp = function(cb){
@@ -139,5 +137,11 @@ Pebble.sendDataToPebbleWithTransactionId = function(cb){
 Pebble.sendNackToPebble = function(cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendNackToPebble', []);
 };
+
+
+// These probably shouldn't be hardcoded...
+Pebble.SPORTS_UUID = "4dab81a6-d2fc-458a-992c-7a1f3b96a970";
+Pebble.GOLF_UUID = "cf1e816a-9db0-4511-bbb8-f60c48ca8fac";
+
 
 module.exports = Pebble;
