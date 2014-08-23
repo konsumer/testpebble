@@ -11,41 +11,30 @@
             <h2>Pebble Cordova</h2>
             <p>
                 <strong>Pebble Connected?</strong>
-                <span ng-show="connected">yes</span>
-                <span ng-show="!connected">no</span>
+                <span class="alert-success" ng-show="connected">yes</span>
+                <span class="alert-danger" ng-show="!connected">no</span>
             <p>
         </div>
         
         <div class="container" ng-show="connected">
             <p>
                 <strong>Data-logging Supported?</strong>
-                <span ng-show="dataLogging">yes</span>
-                <span ng-show="!dataLogging">no</span>
+                <span class="alert-success" ng-show="dataLogging">yes</span>
+                <span class="alert-danger" ng-show="!dataLogging">no</span>
             </p>
             <p>
                 <strong>App-messages Supported?</strong>
-                <span ng-show="appMessages">yes</span>
-                <span ng-show="!appMessages">no</span>
+                <span class="alert-success" ng-show="appMessages">yes</span>
+                <span class="alert-danger" ng-show="!appMessages">no</span>
             </p>
         </div>
 
-        <hr/>
-
         <div class="container" ng-show="connected" ng-init="mode='message'">
-            <h3>Test</h3>
-            
-            <div class="form-group">
-                <div class="radio">
-                    <label>
-                        <input type="radio" id="mode" ng-model="mode" value="message">
-                        Send a message
-                    </label>
-                    <label>
-                        <input type="radio" id="mode" ng-model="mode" value="play">
-                        Set current song
-                    </label>
-                </div>
-            </div>
+            <h3>
+                Test 
+                <span ng-show="mode=='message'">Alert Messages</span>
+                <span ng-show="mode=='play'">Setting Current Song</span>
+            </h3>
             
             <div class="form-group">
                 <label for="from">
@@ -67,11 +56,16 @@
                 </label>
                 <input type="text" class="form-control input-lg" id="body" ng-model="body">
             </div>
-            
-            <center>
+
+            <div class="form-group">
+                <div class="btn-group btn-group-lg">
+                    <button type="button" class="btn btn-default" ng-click="mode='message'" ng-class="{active:mode=='message'}">Message</button>
+                    <button type="button" class="btn btn-default" ng-click="mode='play'" ng-class="{active:mode=='play'}">Music</button>
+                </div>
+
                 <button ng-click="message()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='message'">send</button>
                 <button ng-click="play()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='play'">set</button>
-            </center>
+            </div>
         </div>
 
     </body>
