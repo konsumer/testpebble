@@ -2,13 +2,14 @@
 <widget id="com.ionicframework.testpebble487404" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>testpebble</name>
   <description>
-        An Ionic Framework and Cordova project.
+        Simple ionic tester for the cordova pebble plugin
     </description>
-  <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
+  <author email="konsumer@jetboystudio.com" href="http://jetboystudio.com/">
+      David Konsumer
     </author>
   <content src="index.html"/>
   <access origin="*"/>
+  <preference name="orientation" value="portrait" />
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
