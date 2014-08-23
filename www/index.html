@@ -5,28 +5,22 @@
         <meta name="format-detection" content="telephone=no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link href="bootstrap.min.css" rel="stylesheet">
+        <style>
+            .indicators strong {
+                padding: 5px;
+            }
+        </style>
     </head>
     <body ng-controller="DemoController">
         <div class="container">
             <h2>Pebble Cordova</h2>
+            <p class="indicators">
+                <strong ng-class="{'alert-success': connected, 'alert-danger': !connected}">Connected</strong>
+                <span ng-show="connected">
+                    <strong ng-class="{'alert-success': dataLogging, 'alert-danger': !dataLogging}">Data-logging</strong>
+                    <strong ng-class="{'alert-success': appMessages, 'alert-danger': !appMessages}">App-messages</strong>
+                </span>
             <p>
-                <strong>Pebble Connected?</strong>
-                <span class="alert-success" ng-show="connected">yes</span>
-                <span class="alert-danger" ng-show="!connected">no</span>
-            <p>
-        </div>
-        
-        <div class="container" ng-show="connected">
-            <p>
-                <strong>Data-logging Supported?</strong>
-                <span class="alert-success" ng-show="dataLogging">yes</span>
-                <span class="alert-danger" ng-show="!dataLogging">no</span>
-            </p>
-            <p>
-                <strong>App-messages Supported?</strong>
-                <span class="alert-success" ng-show="appMessages">yes</span>
-                <span class="alert-danger" ng-show="!appMessages">no</span>
-            </p>
         </div>
 
         <div class="container" ng-show="connected" ng-init="mode='message'">
@@ -35,6 +29,11 @@
                 <span ng-show="mode=='message'">Alert Messages</span>
                 <span ng-show="mode=='play'">Current Song</span>
             </h3>
+
+            <div class="btn-group btn-group-lg">
+                <button type="button" class="btn btn-default" ng-click="mode='message'" ng-class="{active:mode=='message'}">Message</button>
+                <button type="button" class="btn btn-default" ng-click="mode='play'" ng-class="{active:mode=='play'}">Music</button>
+            </div>
 
             <div class="help-block">
                 <span ng-show="mode=='message'">Send an alert to your watch.</span>
@@ -63,11 +62,6 @@
             </div>
 
             <div class="form-group">
-                <div class="btn-group btn-group-lg">
-                    <button type="button" class="btn btn-default" ng-click="mode='message'" ng-class="{active:mode=='message'}">Message</button>
-                    <button type="button" class="btn btn-default" ng-click="mode='play'" ng-class="{active:mode=='play'}">Music</button>
-                </div>
-
                 <button ng-click="message()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='message'">send</button>
                 <button ng-click="play()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='play'">set</button>
             </div>
