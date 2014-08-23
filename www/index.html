@@ -71,6 +71,13 @@
                 <button ng-click="message()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='message'">send</button>
                 <button ng-click="play()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='play'">set</button>
             </div>
+
+            <div class="form-group">
+                <div class="btn-group btn-group-lg">
+                    <button type="button" class="btn btn-default" ng-click="sports()">Sports</button>
+                    <button type="button" class="btn btn-default" ng-click="golf()">Golf</button>
+                </div>
+            </div>
         </div>
 
     </body>
@@ -79,33 +86,28 @@
     <script type="text/javascript" src="angular.min.js"></script>
     
     <script type="text/javascript">
-        function DemoController($scope, $interval){
+        function DemoController($scope){
+            // wrap in deviceready, so you can be sure plugins have loaded
             document.addEventListener("deviceready", function(){
-                // keep track of various stats
-                // this will be replaced later by registerPebbleConnectedReceiver/registerPebbleDisconnectedReceiver
-                $interval(function(){
-                    Pebble.isWatchConnected(function(er, connected){
-                        if (er) console.error(er);
-                        $scope.connected = connected;
-                        if (connected){
-                            Pebble.getWatchFWVersion(function(er, firmware){
-                                if (er) console.error(er);
-                                $scope.firmware = firmware;
+                // watch for connect/disconnect update info
+                function connected(err, status){
+                    if (!err) $scope.connected = status;
+                    if (status){
+                        Pebble.getWatchFWVersion(function(err, firmware){
+                            if (!err) $scope.firmware = firmware;
+                            Pebble.areAppMessagesSupported(function(err, supported){
+                                if (!err) $scope.appMessages = supported;
+                                Pebble.isDataLoggingSupported(function(err, supported){
+                                    if (!err) $scope.dataLogging = supported;
+                                    $scope.$apply();
+                                });
                             });
-
-                            Pebble.areAppMessagesSupported(function(er, supported){
-                                if (er) console.error(er);
-                                $scope.appMessages = supported;
-                            });
-
-                            Pebble.isDataLoggingSupported(function(er, supported){
-                                if (er) console.error(er);
-                                $scope.dataLogging = supported;
-                            });
-                        }
-                    });
-
-                }, 500);
+                        });                        
+                    }
+                }
+                Pebble.registerPebbleConnectedReceiver(connected);
+                Pebble.registerPebbleDisconnectedReceiver(connected);
+                Pebble.isWatchConnected(connected);
 
                 $scope.message = function(){
                     Pebble.alert($scope.from, $scope.title, $scope.body);
@@ -113,6 +115,14 @@
 
                 $scope.play = function(){
                     Pebble.music($scope.from, $scope.title, $scope.body);
+                }
+
+                $scope.sports = function(){
+                    Pebble.startSportsOnPebble();
+                }
+
+                $scope.golf = function(){
+                    Pebble.startGolfOnPebble();
                 }
 
             }, false);
