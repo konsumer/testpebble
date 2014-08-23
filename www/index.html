@@ -23,6 +23,14 @@
             <p>
         </div>
 
+        <div class="container" ng-show="connected">
+            <h3>Test Internal Apps</h3>
+            <div class="form-group">
+                <button type="button" class="btn btn-default btn-lg" ng-click="sports()">Sports</button>
+                <button type="button" class="btn btn-default btn-lg" ng-click="golf()">Golf</button>
+            </div>
+        </div>
+
         <div class="container" ng-show="connected" ng-init="mode='message'">
             <h3>
                 Test 
@@ -66,15 +74,6 @@
                 <button ng-click="play()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='play'">set</button>
             </div>
         </div>
-
-        <div class="container" ng-show="connected">
-            <h3>Test Internal Apps</h3>
-            <div class="form-group">
-                <button type="button" class="btn btn-default btn-lg" ng-click="sports()">Sports</button>
-                <button type="button" class="btn btn-default btn-lg" ng-click="golf()">Golf</button>
-            </div>
-        </div>
-
     </body>
     
     <script type="text/javascript" src="cordova.js"></script>
