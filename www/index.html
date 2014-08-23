@@ -1,41 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html ng-app>
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link href="bootstrap.min.css" rel="stylesheet">
     </head>
-    <body>
-        <ul>
-            <li>View console in Chrome's "Inspect Devices" to see any errors.</li>
-            <li>Watch <span id="not">may be</span> connected.</li>
-        </ul>
+    <body ng-controller="DemoController">
+        <div class="container">
+            <h2>Pebble Cordova</h2>
+            <p>
+                <strong>Pebble Connected?</strong>
+                <span ng-show="connected">yes</span>
+                <span ng-show="!connected">no</span>
+            <p>
+        </div>
+        
+        <div class="container" ng-show="connected">
+            <p>
+                <strong>Data-logging Supported?</strong>
+                <span ng-show="dataLogging">yes</span>
+                <span ng-show="!dataLogging">no</span>
+            </p>
+            <p>
+                <strong>App-messages Supported?</strong>
+                <span ng-show="appMessages">yes</span>
+                <span ng-show="!appMessages">no</span>
+            </p>
+        </div>
+
+        <hr/>
+
+        <div class="container" ng-show="connected" ng-init="mode='message'">
+            <h3>Test</h3>
+            
+            <div class="form-group">
+                <div class="radio">
+                    <label>
+                        <input type="radio" id="mode" ng-model="mode" value="message">
+                        Send a message
+                    </label>
+                    <label>
+                        <input type="radio" id="mode" ng-model="mode" value="play">
+                        Set current song
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="from">
+                    <span ng-show="mode=='message'">From</span>
+                    <span ng-show="mode=='play'">Artist</span>
+                </label>
+                <input type="text" class="form-control input-lg" id="from" ng-model="from">
+            </div>
+            
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control input-lg" id="title" ng-model="title">
+            </div>
+            
+            <div class="form-group">
+                <label for="body">
+                    <span ng-show="mode=='message'">Body</span>
+                    <span ng-show="mode=='play'">Album</span>
+                </label>
+                <input type="text" class="form-control input-lg" id="body" ng-model="body">
+            </div>
+            
+            <center>
+                <button ng-click="message()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='message'">send</button>
+                <button ng-click="play()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='play'">set</button>
+            </center>
+        </div>
+
     </body>
+    
     <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="angular.min.js"></script>
     
     <script type="text/javascript">
-        function updateStatus(error, connected){
-            var not = document.getElementById('not');
-            if (error){
-                not.innerHTML = 'may be';
-                return console.error(error);
-            }
-            
-            if (connected){
-                not.innerHTML = 'is ';
-            }else{
-                not.innerHTML = 'is not ';
-            }
-        }
+        function DemoController($scope, $interval){
+            document.addEventListener("deviceready", function(){
+                // keep track of various stats
+                // this will be replaced later by registerPebbleConnectedReceiver/registerPebbleDisconnectedReceiver
+                $interval(function(){
+                    Pebble.isWatchConnected(function(er, connected){
+                        if (er) console.error(er);
+                        $scope.connected = connected;
+                        if (connected){
+                            Pebble.getWatchFWVersion(function(er, firmware){
+                                if (er) console.error(er);
+                                $scope.firmware = firmware;
+                            });
 
-        function deviceReady(){
-            setInterval(function(){ Pebble.isWatchConnected(updateStatus); }, 500);
-            
-            Pebble.alert('Cordova Plugin', 'message from cordova', 'o cool. This came from your cordova app.');
-            Pebble.music('Ylvis', 'The Fox', 'What Does the Fox Say?');
-        }
+                            Pebble.areAppMessagesSupported(function(er, supported){
+                                if (er) console.error(er);
+                                $scope.appMessages = supported;
+                            });
 
-        document.addEventListener("deviceready", deviceReady, false);
+                            Pebble.isDataLoggingSupported(function(er, supported){
+                                if (er) console.error(er);
+                                $scope.dataLogging = supported;
+                            });
+                        }
+                    });
+
+                }, 500);
+
+                $scope.message = function(){
+                    Pebble.alert($scope.from, $scope.title, $scope.body);
+                }
+
+                $scope.play = function(){
+                    Pebble.music($scope.from, $scope.title, $scope.body);
+                }
+
+            }, false);
+        }
     </script>
 </html>
