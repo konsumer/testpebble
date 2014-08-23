@@ -104,6 +104,10 @@ Pebble.registerReceivedNackHandler = function(uuid, cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedNackHandler', []);
 };
 
+Pebble.sendAckToPebble = function(transactionId, cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendAckToPebble', []);
+};
+
 ///////  None of these are implemented:
 
 Pebble.customizeWatchApp = function(type, name, icon, cb){
@@ -120,10 +124,6 @@ Pebble.unregisterDataLogReceiver = function(cb){
 
 Pebble.requestDataLogsForApp = function(cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'requestDataLogsForApp', []);
-};
-
-Pebble.sendAckToPebble = function(cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendAckToPebble', []);
 };
 
 Pebble.sendDataToPebble = function(cb){

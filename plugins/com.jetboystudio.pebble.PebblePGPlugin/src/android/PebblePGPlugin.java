@@ -152,6 +152,13 @@ public class PebblePGPlugin extends CordovaPlugin {
             return true;
         }
 
+        // TODO: untested!
+        if (action.equals("sendAckToPebble")){
+            int transactionId = args.getInt(0);
+            PebbleKit.sendAckToPebble(this.cordova.getActivity().getApplicationContext(), transactionId);
+            return true;
+        }
+
         /////
 
         if (action.equals("registerDataLogReceiver")){
@@ -170,11 +177,6 @@ public class PebblePGPlugin extends CordovaPlugin {
         }
 
         if (action.equals("requestDataLogsForApp")){
-            cb.error("Not Implemented.");
-            return true;
-        }
-
-        if (action.equals("sendAckToPebble")){
             cb.error("Not Implemented.");
             return true;
         }
