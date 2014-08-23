@@ -33,8 +33,13 @@
             <h3>
                 Test 
                 <span ng-show="mode=='message'">Alert Messages</span>
-                <span ng-show="mode=='play'">Setting Current Song</span>
+                <span ng-show="mode=='play'">Current Song</span>
             </h3>
+
+            <div class="help-block">
+                <span ng-show="mode=='message'">Send an alert to your watch.</span>
+                <span ng-show="mode=='play'">Set the currently-playing song.</span>
+            </div>
             
             <div class="form-group">
                 <label for="from">
