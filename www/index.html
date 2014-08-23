@@ -1,125 +1,42 @@
 <!DOCTYPE html>
-<html ng-app>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link href="bootstrap.min.css" rel="stylesheet">
-        <style>
-            .indicators strong {
-                padding: 5px;
-            }
-        </style>
-    </head>
-    <body ng-controller="DemoController">
-        <div class="container">
-            <h2>Pebble Cordova <small ng-show="connected">( {{firmware.tag}} )</small></h2>
-            <p class="indicators">
-                <strong ng-class="{'alert-success': connected, 'alert-danger': !connected}">Connected</strong>
-                <span ng-show="connected">
-                    <strong ng-class="{'alert-success': dataLogging, 'alert-danger': !dataLogging}">Data-logging</strong>
-                    <strong ng-class="{'alert-success': appMessages, 'alert-danger': !appMessages}">App-messages</strong>
-                </span>
-            <p>
-        </div>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
 
-        <div class="container" ng-show="connected">
-            <h3>Test Internal Apps</h3>
-            <div class="form-group">
-                <button type="button" class="btn btn-default btn-lg" ng-click="sports()">Sports</button>
-                <button type="button" class="btn btn-default btn-lg" ng-click="golf()">Golf</button>
-            </div>
-        </div>
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
-        <div class="container" ng-show="connected" ng-init="mode='message'">
-            <h3>
-                Test 
-                <span ng-show="mode=='message'">Alert Messages</span>
-                <span ng-show="mode=='play'">Current Song</span>
-            </h3>
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
 
-            <div class="btn-group btn-group-lg">
-                <button type="button" class="btn btn-default" ng-click="mode='message'" ng-class="{active:mode=='message'}">Message</button>
-                <button type="button" class="btn btn-default" ng-click="mode='play'" ng-class="{active:mode=='play'}">Music</button>
-            </div>
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
 
-            <div class="help-block">
-                <span ng-show="mode=='message'">Send an alert to your watch.</span>
-                <span ng-show="mode=='play'">Set the currently-playing song.</span>
-            </div>
-            
-            <div class="form-group">
-                <label for="from">
-                    <span ng-show="mode=='message'">From</span>
-                    <span ng-show="mode=='play'">Artist</span>
-                </label>
-                <input type="text" class="form-control input-lg" id="from" ng-model="from">
-            </div>
-            
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" class="form-control input-lg" id="title" ng-model="title">
-            </div>
-            
-            <div class="form-group">
-                <label for="body">
-                    <span ng-show="mode=='message'">Body</span>
-                    <span ng-show="mode=='play'">Album</span>
-                </label>
-                <input type="text" class="form-control input-lg" id="body" ng-model="body">
-            </div>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
 
-            <div class="form-group">
-                <button ng-click="message()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='message'">send</button>
-                <button ng-click="play()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='play'">set</button>
-            </div>
-        </div>
-    </body>
-    
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="angular.min.js"></script>
-    
-    <script type="text/javascript">
-        function DemoController($scope){
-            // wrap in deviceready, so you can be sure plugins have loaded
-            document.addEventListener("deviceready", function(){
-                // watch for connect/disconnect & update info
-                function connected(err, status){
-                    if (!err) $scope.connected = status;
-                    if (status){
-                        Pebble.getWatchFWVersion(function(err, firmware){
-                            if (!err) $scope.firmware = firmware;
-                            Pebble.areAppMessagesSupported(function(err, supported){
-                                if (!err) $scope.appMessages = supported;
-                                Pebble.isDataLoggingSupported(function(err, supported){
-                                    if (!err) $scope.dataLogging = supported;
-                                    $scope.$apply();
-                                });
-                            });
-                        });                        
-                    }
-                }
-                Pebble.registerPebbleConnectedReceiver(connected);
-                Pebble.registerPebbleDisconnectedReceiver(connected);
-                Pebble.isWatchConnected(connected);
-
-                $scope.message = function(){
-                    Pebble.alert($scope.from, $scope.title, $scope.body);
-                }
-
-                $scope.play = function(){
-                    Pebble.music($scope.from, $scope.title, $scope.body);
-                }
-
-                $scope.sports = function(){
-                    Pebble.startAppOnPebble(Pebble.SPORTS_UUID);
-                }
-
-                $scope.golf = function(){
-                    Pebble.startAppOnPebble(Pebble.GOLF_UUID);
-                }
-
-            }, false);
-        }
-    </script>
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+  </head>
+  <body ng-app="starter" animation="slide-left-right-ios7">
+    <!-- 
+      The nav bar that will be updated as we navigate between views.
+    -->
+    <ion-nav-bar class="bar-stable nav-title-slide-ios7">
+      <ion-nav-back-button class="button-icon icon  ion-ios7-arrow-back">
+        Back
+      </ion-nav-back-button>
+    </ion-nav-bar>
+    <!-- 
+      The views will be rendered in the <ion-nav-view> directive below
+      Templates are in the /templates folder (but you could also
+      have templates inline in this html file if you'd like).
+    -->
+    <ion-nav-view></ion-nav-view>
+  </body>
 </html>
