@@ -6,3 +6,6 @@ This is a minimal test for [phonegap-pebble](https://github.com/konsumer/phonega
 
     cordova platform add android
     cordova run
+
+
+![screenshot](https://raw.githubusercontent.com/konsumer/testpebble/master/screenshot.png "Screenshot")
