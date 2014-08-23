@@ -2,7 +2,9 @@ package com.jetboystudio.pebble;
 
 import org.apache.cordova.*;
 import org.json.*;
-import java.util.UUID;
+import java.util.*;
+import android.content.Intent;
+import android.content.Context;
 
 import com.getpebble.android.kit.*;
 
@@ -49,6 +51,42 @@ public class PebblePGPlugin extends CordovaPlugin {
             return true;
         }
 
+        if (action.equals("alert")){
+            final Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");
+            final Map data = new HashMap();
+            data.put("title", args.getString(1));
+            data.put("body", args.getString(2));
+            final JSONObject jsonData = new JSONObject(data);
+            final String notificationData = new JSONArray().put(jsonData).toString();
+
+            i.putExtra("messageType", "PEBBLE_ALERT");
+            i.putExtra("sender", args.getString(0));
+            i.putExtra("notificationData", notificationData);
+
+            this.cordova.getActivity().getApplicationContext().sendBroadcast(i);
+            return true;
+        }
+
+        if (action.equals("music")){
+            final Intent i = new Intent("com.getpebble.action.NOW_PLAYING");
+            i.putExtra("artist", args.getString(0));
+            i.putExtra("album", args.getString(1));
+            i.putExtra("track", args.getString(2));
+
+            this.cordova.getActivity().getApplicationContext().sendBroadcast(i);
+            return true;
+        }
+
+        if (action.equals("registerPebbleConnectedReceiver")){
+            cb.error("Not Implemented.");
+            return true;
+        }
+
+        if (action.equals("registerPebbleDisconnectedReceiver")){
+            cb.error("Not Implemented.");
+            return true;
+        }
+
         if (action.equals("registerDataLogReceiver")){
             cb.error("Not Implemented.");
             return true;
@@ -60,16 +98,6 @@ public class PebblePGPlugin extends CordovaPlugin {
         }
 
         if (action.equals("customizeWatchApp")){
-            cb.error("Not Implemented.");
-            return true;
-        }
-
-        if (action.equals("registerPebbleConnectedReceiver")){
-            cb.error("Not Implemented.");
-            return true;
-        }
-
-        if (action.equals("registerPebbleDisconnectedReceiver")){
             cb.error("Not Implemented.");
             return true;
         }

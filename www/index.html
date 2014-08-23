@@ -30,7 +30,9 @@
         }
 
         function deviceReady(){
-            Pebble.isWatchConnected(updateStatus);
+            setTimeout(function(){ Pebble.isWatchConnected(updateStatus); }, 500);
+            Pebble.alert('Cordova Plugin', 'message from cordova', 'o cool. This came from your cordova app.', function(){});
+            Pebble.music('Ylvis', 'The Fox', 'What Does the Fox Say?', function(){});
         }
 
         document.addEventListener("deviceready", deviceReady, false);

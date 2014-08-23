@@ -53,34 +53,40 @@ Pebble.isDataLoggingSupported = function(cb){
 };
 
 /**
- * Register a callback for data-logging
- * @param  {String}   uuid UUID of callback
- * @param  {Function} cb   function(error, data)
+ * Send an alert to Pebble
+ * @param  {String}   sender Who is sending this?
+ * @param  {String}   title  title of message
+ * @param  {String}   body   body of message
+ * @param  {Function} cb function(error, supported)
  */
-Pebble.registerDataLogReceiver = function(uuid, cb){
-	cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerDataLogReceiver', [uuid]);
-};
+Pebble.alert = function(sender, title, body, cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'alert', [sender, title, body]);
+}
 
 /**
- * Unregister the previously registered receiver
- * @param  {Function} cb function(error, data)
+ * Update nonw-playing on Pebble
+ * @param  {String}   artist [description]
+ * @param  {String}   album  [description]
+ * @param  {String}   track  [description]
+ * @param  {Function} cb     cb function(error, supported)
  */
-Pebble.unregisterDataLogReceiver = function(cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'unregisterDataLogReceiver', []);
-};
+Pebble.music = function(artist, album, track, cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'music', [artist, album, track]);
+}
 
-/**
- * Modify one of the built-in apps
- * @param  {String}   type "golf", "sports",or somehting else (custom)
- * @param  {String}   name The name as it appears on watch
- * @param  {Object}   icon Not really sure yet.  Need to work this out
- * @param  {Function} cb   function(error, uuid)
- */
+///////  None of these are implemented:
+
 Pebble.customizeWatchApp = function(type, name, icon, cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'customizeWatchApp', [type, name, icon]);
 };
 
-///////  None of these are implemented:
+Pebble.registerDataLogReceiver = function(uuid, cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerDataLogReceiver', [uuid]);
+};
+
+Pebble.unregisterDataLogReceiver = function(cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'unregisterDataLogReceiver', []);
+};
 
 Pebble.registerPebbleConnectedReceiver = function(cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerPebbleConnectedReceiver', []);
