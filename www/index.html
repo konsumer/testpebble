@@ -72,11 +72,11 @@
                 <button ng-click="play()" type="button" class="btn btn-primary btn-lg" ng-show="mode=='play'">set</button>
             </div>
 
+            <h3>Test Internal Apps</h3>
+
             <div class="form-group">
-                <div class="btn-group btn-group-lg">
-                    <button type="button" class="btn btn-default" ng-click="sports()">Sports</button>
-                    <button type="button" class="btn btn-default" ng-click="golf()">Golf</button>
-                </div>
+                <button type="button" class="btn btn-default btn-lg" ng-click="sports()">Sports</button>
+                <button type="button" class="btn btn-default btn-lg" ng-click="golf()">Golf</button>
             </div>
         </div>
 
@@ -89,7 +89,7 @@
         function DemoController($scope){
             // wrap in deviceready, so you can be sure plugins have loaded
             document.addEventListener("deviceready", function(){
-                // watch for connect/disconnect update info
+                // watch for connect/disconnect & update info
                 function connected(err, status){
                     if (!err) $scope.connected = status;
                     if (status){
