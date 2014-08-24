@@ -1,6 +1,6 @@
 <ion-view title="Info">
   <ion-content class="has-header padding">
     <div>Connected: {{connected}}</div>
-    <div>Firmware: {{firmware.version}}</div>
+    <div ng-if="connected">Firmware: {{firmware.version}}</div>
   </ion-content>
 </ion-view>
