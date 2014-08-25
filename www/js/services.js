@@ -49,15 +49,20 @@ angular.module('starter.services', [])
 
   PebbleFactory.updateSports = function(time, distance, pace){
     var deferred = $q.defer();
+    
+    var data = {};
+    data[Pebble.SPORTS_TIME_KEY] = time;
+    data[Pebble.SPORTS_DISTANCE_KEY] = distance + ".0";
+    data[Pebble.SPORTS_DATA_KEY] = pace;
+    data[Pebble.SPORTS_LABEL_KEY] = Pebble.SPORTS_DATA_PACE;
 
-    // i dunno why this is breaking things 
-    /*
-    Pebble.sendDataToPebble(Pebble.SPORTS_UUID, {time, distance, pace}, function(err, uuid){
+    console.log(data);
+
+    Pebble.sendDataToPebble(Pebble.SPORTS_UUID, data, function(err, uuid){
       if (err) return deferred.reject(err);
       deferred.resolve(uuid);
     });
-    */
-    
+
     return deferred.promise;
   }
 
