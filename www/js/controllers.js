@@ -25,14 +25,14 @@ angular.module('starter.controllers', [])
 
 .controller('AppsCtrl', function($scope, Pebble, $interval, $timeout) {
 	$scope.sports = function(){
-		var count = 1;
+		var count = 0;
 		Pebble.sports();
 		
 		// upate data 10 times.
 		$timeout(function(){
 			var updater = $interval(function(){
 				count++;
-				if (count > 10) $interval.cancel(updater);
+				if (count >= 10) return $interval.cancel(updater);
 				var time = "0" + count + ":00";
 				Pebble.updateSports(time, count, time);
 			}, 1000);
