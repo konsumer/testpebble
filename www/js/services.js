@@ -3,7 +3,8 @@ angular.module('starter.services', [])
 .factory('Pebble', function($q, $rootScope) {
   var PebbleFactory = {
     connected: false,
-    firmware: {}
+    firmware: {},
+    uuid: {}
   };
   PebbleFactory.alert = function(title, body, sender){
     var deferred = $q.defer();
@@ -25,6 +26,7 @@ angular.module('starter.services', [])
   }
 
   PebbleFactory.app = function(uuid){
+    PebbleFactory.uuid = uuid;
     var deferred = $q.defer();
     Pebble.startAppOnPebble(uuid, function(err, result){
       if (err) return deferred.reject(err);
@@ -70,6 +72,10 @@ angular.module('starter.services', [])
       $rootScope.$broadcast('pebble.disconnected');
     });
   });
+
+  document.addEventListener("backbutton", function(event){
+    Pebble.closeAppOnPebble(PebbleFactory.uuid);
+  }, true);
 
   return PebbleFactory;
 });
