@@ -1,11 +1,15 @@
 angular.module('starter.services', [])
 
+/**
+ *  Angular wrapper for Pebble cordova plugin
+ */
 .factory('Pebble', function($q, $rootScope) {
   var PebbleFactory = {
     connected: false,
     firmware: {},
     uuid: {}
   };
+  
   PebbleFactory.alert = function(title, body, sender){
     var deferred = $q.defer();
     sender = sender || 'CordovaPebble';
@@ -41,6 +45,20 @@ angular.module('starter.services', [])
 
   PebbleFactory.sports = function(){
     return PebbleFactory.app(Pebble.SPORTS_UUID);
+  }
+
+  PebbleFactory.updateSports = function(time, distance, pace){
+    var deferred = $q.defer();
+
+    // i dunno why this is breaking things 
+    /*
+    Pebble.sendDataToPebble(Pebble.SPORTS_UUID, {time, distance, pace}, function(err, uuid){
+      if (err) return deferred.reject(err);
+      deferred.resolve(uuid);
+    });
+    */
+    
+    return deferred.promise;
   }
 
   var handleConnected = function(err, connected){

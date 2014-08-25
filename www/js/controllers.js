@@ -23,8 +23,22 @@ angular.module('starter.controllers', [])
 	$scope.music = Pebble.music;
 })
 
-.controller('AppsCtrl', function($scope, Pebble) {
-	$scope.sports = Pebble.sports;
+.controller('AppsCtrl', function($scope, Pebble, $interval, $timeout) {
+	$scope.sports = function(){
+		var count = 1;
+		Pebble.sports();
+		
+		// upate data 10 times.
+		$timeout(function(){
+			var updater = $interval(function(){
+				count++;
+				if (count > 10) $interval.cancel(updater);
+				var time = "0" + count + ":00";
+				Pebble.updateSports(time, count, time);
+			}, 1000);
+		}, 1000)
+	}
+
 	$scope.golf = Pebble.golf;
 })
 
