@@ -26,6 +26,13 @@ angular.module('starter.services', [])
     return deferred.promise;
   }
 
+/**
+ * Update now-playing on Pebble
+ * @param  {String}   artist [description]
+ * @param  {String}   album  [description]
+ * @param  {String}   track  [description]
+ * @return {Promise}          Resolves on success, rejects on error
+ */
   PebbleFactory.music = function(artist, album, track){
     var deferred = $q.defer();
     Pebble.music(artist, album, track, function(err, result){
@@ -35,6 +42,11 @@ angular.module('starter.services', [])
     return deferred.promise;
   }
 
+/**
+ * Start an app on the Pebble
+ * @param  {String}   uuid UUID of app to be started
+ * @return {Promise}       Resolves on success, rejects on error
+ */
   PebbleFactory.app = function(uuid){
     var deferred = $q.defer();
     Pebble.startAppOnPebble(uuid, function(err, result){
@@ -44,6 +56,11 @@ angular.module('starter.services', [])
     return deferred.promise;
   }
 
+/**
+ * Close an app on the Pebble
+ * @param  {String}   uuid UUID of app to be closed
+ * @return {Promise}       Resolves on success, rejects on error
+ */
   PebbleFactory.stop = function(uuid){
     var deferred = $q.defer();
     Pebble.closeAppOnPebble(uuid, function(err, result){
@@ -53,11 +70,14 @@ angular.module('starter.services', [])
     return deferred.promise;
   }
 
+/**
+ * Send data to Pebble
+ * @param  {[type]}   uuid UUID of app to receive data
+ * @param  {Array}    data Data to send, should be in this format: [{type:"", key:"", value:"", length:""}]
+ * @return {Promise}       Resolves on success, rejects on error
+ */
   PebbleFactory.data = function(uuid, data){
     var deferred = $q.defer();
-    
-    console.log('data', data);
-
     Pebble.sendDataToPebble(uuid, data, function(err, result){
       if (err) return deferred.reject(err);
       deferred.resolve(result);
@@ -65,6 +85,10 @@ angular.module('starter.services', [])
     return deferred.promise;
   }
 
+  /**
+   * Check if Pebble is connected
+   * @return {Promise}     Resolves on success, rejects on error
+   */
   PebbleFactory.checkConnected = function(){
     var deferred = $q.defer();
     Pebble.isWatchConnected(function(err, connected){
@@ -75,19 +99,18 @@ angular.module('starter.services', [])
     return deferred.promise;
   }
 
-  var handleConnected = function(err, connected){
-    if (err) return;
-    PebbleFactory.connected = connected;
-    if (connected){
-      Pebble.getWatchFWVersion(function(err, fw){
-        PebbleFactory.firmware = fw;
-        $rootScope.$broadcast('pebble.connected', fw);
-      });
-    }
-  };
-
+  // automatically manage connection status with callbacks, update variable & fire events
   document.addEventListener('deviceready', function() {
-    Pebble.registerPebbleConnectedReceiver(handleConnected);
+    Pebble.registerPebbleConnectedReceiver(function(err, connected){
+      if (err) return;
+      PebbleFactory.connected = connected;
+      if (connected){
+        Pebble.getWatchFWVersion(function(err, fw){
+          PebbleFactory.firmware = fw;
+          $rootScope.$broadcast('pebble.connected', fw);
+        });
+      }
+    });
     Pebble.registerPebbleDisconnectedReceiver(function(err, connected){
       if (err) return;
       PebbleFactory.connected = false;
@@ -98,11 +121,13 @@ angular.module('starter.services', [])
   return PebbleFactory;
 })
 
+/**
+ * Angular wrapper for Sports internal-app
+ */
 .factory('Sports', function($q, Pebble){
   var SportsFactory = {};
   
   var isPaceLabel = true;
-  var useMetric = false;
 
   // from constants
   var SPORTS_UUID = "4dab81a6-d2fc-458a-992c-7a1f3b96a970";
@@ -134,16 +159,22 @@ angular.module('starter.services', [])
     return Pebble.data(SPORTS_UUID, data);
   }
 
-  SportsFactory.changeUnits = function(){
-    var data = {};
-    data[SPORTS_UNITS_KEY] = useMetric ? SPORTS_UNITS_METRIC : SPORTS_UNITS_IMPERIAL;
-    useMetric = !useMetric;
+  SportsFactory.setUnits = function(useMetric){
+    var data = [{
+      "key": SPORTS_UNITS_KEY,
+      "value": useMetric ? SPORTS_UNITS_METRIC : SPORTS_UNITS_IMPERIAL,
+      "type":"uint",
+      "length":0
+    }];
     return Pebble.data(SPORTS_UUID, data);
   }
 
   return SportsFactory;
 })
 
+/**
+ * Angular wrapper for Golf internal-app
+ */
 .factory('Golf', function($q, Pebble){
   var GolfFactory = {};
 
