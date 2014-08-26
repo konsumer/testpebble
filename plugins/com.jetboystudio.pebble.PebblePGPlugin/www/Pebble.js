@@ -113,6 +113,37 @@ Pebble.sendDataToPebbleWithTransactionId = function(uuid, data, transactionId, c
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendDataToPebbleWithTransactionId', [uuid, JSON.stringify(data), transactionId]);
 };
 
+/**
+ * Customize a built-in PebbleKit watch-app
+ * @param  {String}   type "golf", "sports", or "other"
+ * @param  {String}   name New name
+ * @param  {Image}    icon An image object for the icon
+ * @param  {Function} cb   function(error, uuid)
+ */
+Pebble.customizeWatchApp = function(type, name, icon, cb){
+    var types = {
+        "golf": 0x01,
+        "sports": 0x00,
+        "other": 0xff
+    }
+
+    // make a cross-origin copy of the image, get base64 string for it
+    var canvas = document.createElement('CANVAS'),
+        ctx = canvas.getContext('2d'),
+        img = new Image;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function(){
+        var dataURL;
+        canvas.height = img.height;
+        canvas.width = img.width;
+        ctx.drawImage(img, 0, 0);
+        dataURL = canvas.toDataURL(outputFormat);
+        canvas = null; 
+        cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'customizeWatchApp', [types[type], name, dataURL]);
+    };
+    img.src = icon.src;
+};
+
 // these need testing
 
 Pebble.registerReceivedDataHandler = function(uuid, cb){
@@ -136,10 +167,6 @@ Pebble.sendNackToPebble = function(transactionId, cb){
 };
 
 ///////  None of these are implemented:
-
-Pebble.customizeWatchApp = function(type, name, icon, cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'customizeWatchApp', [type, name, icon]);
-};
 
 Pebble.registerDataLogReceiver = function(uuid, cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerDataLogReceiver', [uuid]);
