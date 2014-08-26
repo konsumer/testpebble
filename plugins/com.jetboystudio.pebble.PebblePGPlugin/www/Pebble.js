@@ -92,11 +92,28 @@ Pebble.registerPebbleDisconnectedReceiver = function(cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerPebbleDisconnectedReceiver', []);
 };
 
-// these need testing
-
+/**
+ * Send data to Pebble
+ * @param  {String}   uuid UUID of app to receive data
+ * @param  {Array}    data Data to send, should be in this format: [{type:"", key:"", value:"", length:""}]
+ * @param  {Function} cb   function(error, uuid)
+ */
 Pebble.sendDataToPebble = function(uuid, data, cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendDataToPebble', [uuid, JSON.stringify(data)]);
 };
+
+/**
+ * Send data to Pebble, keyed by transactionId
+ * @param  {String}   uuid UUID of app to receive data
+ * @param  {Array}    data Data to send, should be in this format: [{type:"", key:"", value:"", length:""}]
+ * @param  {Integer}  transactionId ID for NACK & ACK Stuff
+ * @param  {Function} cb   function(error, uuid)
+ */
+Pebble.sendDataToPebbleWithTransactionId = function(uuid, data, transactionId, cb){
+    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendDataToPebbleWithTransactionId', [uuid, JSON.stringify(data), transactionId]);
+};
+
+// these need testing
 
 Pebble.registerReceivedDataHandler = function(uuid, cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'registerReceivedDataHandler', [uuid]);
@@ -136,9 +153,7 @@ Pebble.requestDataLogsForApp = function(cb){
     cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'requestDataLogsForApp', []);
 };
 
-Pebble.sendDataToPebbleWithTransactionId = function(cb){
-    cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'sendDataToPebbleWithTransactionId', []);
-};
+
 
 
 module.exports = Pebble;
