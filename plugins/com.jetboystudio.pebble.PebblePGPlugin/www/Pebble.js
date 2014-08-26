@@ -127,7 +127,17 @@ Pebble.customizeWatchApp = function(type, name, icon, cb){
         "other": 0xff
     }
 
-    // make a cross-origin copy of the image, get base64 string for it
+    Pebble.base64image(icon.src || icon, function(dataURL){
+        cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'customizeWatchApp', [types[type], name, dataURL]);
+    })
+
+};
+
+/**
+ * make a cross-origin copy of the image, get base64 string for it
+ * @return {[type]} [description]
+ */
+Pebble.base64image = function(src, cb){
     var canvas = document.createElement('CANVAS'),
         ctx = canvas.getContext('2d'),
         img = new Image;
@@ -138,10 +148,10 @@ Pebble.customizeWatchApp = function(type, name, icon, cb){
         canvas.width = img.width;
         ctx.drawImage(img, 0, 0);
         dataURL = canvas.toDataURL(outputFormat);
-        canvas = null; 
-        cordova.exec(function(result){ cb(null, result); }, cb, 'Pebble', 'customizeWatchApp', [types[type], name, dataURL]);
+        canvas = null;
+        cb(dataURL);
     };
-    img.src = icon.src;
+    img.src = src;
 };
 
 // these need testing
