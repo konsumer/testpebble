@@ -23,22 +23,42 @@ angular.module('starter.controllers', [])
 	$scope.music = Pebble.music;
 })
 
-.controller('AppsCtrl', function($scope, Pebble, $interval, $timeout) {
+.controller('AppsCtrl', function($scope, Sports, Golf, $interval) {
+	var i;
+	
 	$scope.sports = function(){
+		$interval.cancel(i);
 		var count = 0;
-		Pebble.sports();
-		
-		// upate data 10 times.
-		$timeout(function(){
-			var updater = $interval(function(){
-				count++;
-				if (count >= 10) return $interval.cancel(updater);
-				var time = "0" + count + ":00";
-				Pebble.updateSports(time, count, time);
-			}, 1000);
-		}, 1000)
+		Sports.start()
+			.then(function(){
+				i = $interval(function(){
+					if (count >= 10){ 
+						$interval.cancel(i);
+						Sports.stop();
+						return;
+					}
+					time = "0" + count + ":00";
+					Sports.update(time, count, time);
+					count++;
+				}, 1000);
+			});
 	}
 
-	$scope.golf = Pebble.golf;
+	$scope.golf = function(){
+		$interval.cancel(i);
+		var count = 0;
+		Golf.start()
+			.then(function(){
+				i = $interval(function(){
+					if (count >= 10){ 
+						$interval.cancel(i);
+						Golf.stop();
+						return;
+					}
+					Golf.update(count-1, count, count+1, count+2, count+3);
+					count++;
+				}, 1000);
+			});
+	};
 })
 
