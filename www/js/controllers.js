@@ -23,7 +23,7 @@ angular.module('starter.controllers', [])
 	$scope.music = Pebble.music;
 })
 
-.controller('AppsCtrl', function($scope, Sports, Golf, $interval) {
+.controller('AppsCtrl', function($scope, Sports, Golf, Pebble, $interval) {
 	var i;
 	
 	$scope.sports = function(){

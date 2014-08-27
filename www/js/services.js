@@ -112,6 +112,7 @@ angular.module('starter.services', [])
 
   // automatically manage connection status with callbacks, update variable & fire events
   document.addEventListener('deviceready', function() {
+    PebbleFactory.onData = Pebble.registerReceivedDataHandler;
     Pebble.registerPebbleConnectedReceiver(handleConnected);
     Pebble.registerPebbleDisconnectedReceiver(function(err, connected){
       if (err) return;
@@ -132,7 +133,7 @@ angular.module('starter.services', [])
   var isPaceLabel = true;
 
   // from constants
-  var SPORTS_UUID = "4dab81a6-d2fc-458a-992c-7a1f3b96a970";
+  SportsFactory.UUID = "4dab81a6-d2fc-458a-992c-7a1f3b96a970";
   var SPORTS_TIME_KEY = 0;
   var SPORTS_DISTANCE_KEY = 1;
   var SPORTS_DATA_KEY = 2;
@@ -145,11 +146,11 @@ angular.module('starter.services', [])
   var SPORTS_DATA_PACE = 1;
 
   SportsFactory.start = function(){
-    return Pebble.app(SPORTS_UUID);
+    return Pebble.app(SportsFactory.UUID);
   }
 
   SportsFactory.stop = function(){
-    return Pebble.stop(SPORTS_UUID);
+    return Pebble.stop(SportsFactory.UUID);
   }
 
   SportsFactory.update = function(time, distance, addl_data){
@@ -158,7 +159,7 @@ angular.module('starter.services', [])
     data.push({ "key": SPORTS_DISTANCE_KEY, "value": distance, "length":0, "type":"string" });
     data.push({ "key": SPORTS_DATA_KEY, "value": addl_data, "length":0, "type":"string" });
     data.push({ "key": SPORTS_LABEL_KEY, "value": isPaceLabel ? SPORTS_DATA_SPEED : SPORTS_DATA_PACE, "length":0, "type":"uint" });
-    return Pebble.data(SPORTS_UUID, data);
+    return Pebble.data(SportsFactory.UUID, data);
   }
 
   SportsFactory.setUnits = function(useMetric){
@@ -168,7 +169,7 @@ angular.module('starter.services', [])
       "type":"uint",
       "length":0
     }];
-    return Pebble.data(SPORTS_UUID, data);
+    return Pebble.data(SportsFactory.UUID, data);
   }
 
   return SportsFactory;
@@ -181,7 +182,7 @@ angular.module('starter.services', [])
   var GolfFactory = {};
 
   // from constants
-  var GOLF_UUID = "cf1e816a-9db0-4511-bbb8-f60c48ca8fac";
+  GolfFactory.UUID = "cf1e816a-9db0-4511-bbb8-f60c48ca8fac";
   var GOLF_FRONT_KEY = 0;
   var GOLF_MID_KEY = 1;
   var GOLF_BACK_KEY = 2;
@@ -189,11 +190,11 @@ angular.module('starter.services', [])
   var GOLF_PAR_KEY = 4;
 
   GolfFactory.start = function(){
-    return Pebble.app(GOLF_UUID);
+    return Pebble.app(GolfFactory.UUID);
   }
 
   GolfFactory.stop = function(){
-    return Pebble.stop(GOLF_UUID);
+    return Pebble.stop(GolfFactory.UUID);
   }
 
   GolfFactory.update = function(hole, par, back, mid, front){
@@ -203,7 +204,7 @@ angular.module('starter.services', [])
     data.push({ "key": GOLF_BACK_KEY, "value": back + "", "length":0, "type":"string" });
     data.push({ "key": GOLF_MID_KEY, "value": mid + "", "length":0, "type":"string" });
     data.push({ "key": GOLF_FRONT_KEY, "value": front + "", "length":0, "type":"string" });
-    return Pebble.data(GOLF_UUID, data);
+    return Pebble.data(GolfFactory.UUID, data);
   }
 
   return GolfFactory;
