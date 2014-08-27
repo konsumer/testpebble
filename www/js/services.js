@@ -85,6 +85,17 @@ angular.module('starter.services', [])
     return deferred.promise;
   }
 
+  var handleConnected = function(err, connected){
+    if (err) return;
+    PebbleFactory.connected = connected;
+    if (connected){
+      Pebble.getWatchFWVersion(function(err, fw){
+        PebbleFactory.firmware = fw;
+        $rootScope.$broadcast('pebble.connected', fw);
+      });
+    }
+  };
+
   /**
    * Check if Pebble is connected
    * @return {Promise}     Resolves on success, rejects on error
@@ -101,16 +112,7 @@ angular.module('starter.services', [])
 
   // automatically manage connection status with callbacks, update variable & fire events
   document.addEventListener('deviceready', function() {
-    Pebble.registerPebbleConnectedReceiver(function(err, connected){
-      if (err) return;
-      PebbleFactory.connected = connected;
-      if (connected){
-        Pebble.getWatchFWVersion(function(err, fw){
-          PebbleFactory.firmware = fw;
-          $rootScope.$broadcast('pebble.connected', fw);
-        });
-      }
-    });
+    Pebble.registerPebbleConnectedReceiver(handleConnected);
     Pebble.registerPebbleDisconnectedReceiver(function(err, connected){
       if (err) return;
       PebbleFactory.connected = false;
